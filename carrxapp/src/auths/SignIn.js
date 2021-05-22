@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -57,12 +58,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function SignIn() {
+
+  const userRequest = {
+    "email":"",
+    "password":""
+  };
+  
+  
+  const handleInputChange = e => {
+    e.preventDefault();
+    //code below is an example deconstruct
+    const { name, value } = e.target;
+    // ...data
+    setData({
+      ...data,
+      [name]: value
+    });  
+  }
+  
+  const handleSignInButton = (event) => {
+    event.preventDefault();   
+  
+    axios.post(  
+      'http://localhost:8080/user/sign-in', data
+      ).then((response) => {
+        console.log(response);
+        setIsLoggedIn(response.data);
+       
+
+      }, (error) => {
+        console.log(error);
+      });
+  }
+
+  
   const classes = useStyles();
+  const [data, setData] = useState(userRequest);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
+    
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
@@ -81,8 +120,10 @@ export default function SignIn() {
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
+              //autoComplete="email"
+              value={data.email}
               autoFocus
+              onChange={handleInputChange}
             />
             <TextField
               variant="outlined"
@@ -93,7 +134,9 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
+              value={data.password}
+              onChange={handleInputChange}
+              //autoComplete="current-password"
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -105,6 +148,7 @@ export default function SignIn() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={handleSignInButton}
             >
               Sign In
             </Button>
@@ -118,6 +162,9 @@ export default function SignIn() {
                 <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
+              </Grid>
+              <Grid item>
+              {isLoggedIn ? 'Login is successful' : 'Email/Password is incorrect'}
               </Grid>
             </Grid>
             <Box mt={5}>

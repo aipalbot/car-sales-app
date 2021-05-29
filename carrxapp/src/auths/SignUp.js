@@ -1,17 +1,24 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import React,{ useState} from 'react';
+import {Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
+} from '@material-ui/core';
+
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import axios from "axios";
+import { useHistory } from 'react-router-dom';
+
 
 function Copyright() {
   return (
@@ -44,10 +51,56 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 150,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  }
 }));
+
+
+
+const userRequest = {
+  "firstName":"",
+  "lastName":"",
+  "password":"",
+  "email":"",
+  "role":""
+};
+
+
 
 export default function SignUp() {
   const classes = useStyles();
+  const [data, setData] = useState(userRequest);
+  const history = useHistory();
+  const handleInputChange = e => {
+    e.preventDefault();
+    //code below is an example deconstruct
+    const { name, value } = e.target;
+    // ...data
+    setData({
+      ...data,
+      [name]: value
+    });  
+  }
+
+  const handleSignUpButton = (event) => {
+    event.preventDefault();   
+    console.log(data);
+    axios.post(  
+      'http://localhost:8080/user/create', data
+      ).then((response) => {
+
+        console.log(response.data);
+        history.push("/dashboard");
+
+      }, (error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,10 +120,10 @@ export default function SignUp() {
                 name="firstName"
                 variant="outlined"
                 required
-                fullWidth
-                id="firstName"
+                fullWidth                
                 label="First Name"
                 autoFocus
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -78,10 +131,11 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
                 name="lastName"
+                label="Last Name"
+             
                 autoComplete="lname"
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -89,10 +143,11 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
                 name="email"
+                label="Email Address"
+            
                 autoComplete="email"
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -105,13 +160,27 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
+        <FormControl variant="filled" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-filled-label">Select User Role</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"         
+          onChange={handleInputChange}
+          name = "role"
+          // value={age}
+          // onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="Normal">Normal User</MenuItem>
+          <MenuItem value="Admin">Admin User</MenuItem>     
+        </Select>
+      </FormControl>
             </Grid>
           </Grid>
           <Button
@@ -120,6 +189,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSignUpButton}
           >
             Sign Up
           </Button>

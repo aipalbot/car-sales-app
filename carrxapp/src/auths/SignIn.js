@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
+
 
 function Copyright() {
   return (
@@ -61,6 +63,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
 
+  const history = useHistory();
+  
   const userRequest = {
     "email":"",
     "password":""
@@ -86,7 +90,7 @@ export default function SignIn() {
       ).then((response) => {
         console.log(response);
         setIsLoggedIn(response.data);
-       
+        history.push("/dashboard");
 
       }, (error) => {
         console.log(error);

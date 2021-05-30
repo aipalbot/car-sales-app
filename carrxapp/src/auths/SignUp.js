@@ -18,6 +18,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import { useHistory } from 'react-router-dom';
+import CommonConstant from '../constants/CommonConstant';
 
 
 function Copyright() {
@@ -91,11 +92,11 @@ export default function SignUp() {
     event.preventDefault();   
     console.log(data);
     axios.post(  
-      'http://localhost:8080/user/create', data
+      CommonConstant.CREATE_API_ENDPOINT, data
       ).then((response) => {
 
         console.log(response.data);
-        history.push("/dashboard");
+        history.push(CommonConstant.DASHBOARD);
 
       }, (error) => {
         console.log(error);

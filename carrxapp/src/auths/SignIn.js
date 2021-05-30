@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import { useHistory } from 'react-router-dom';
+import CommonConstant from '../constants/CommonConstant';
 
 
 function Copyright() {
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
 
   const history = useHistory();
-  
+
   const userRequest = {
     "email":"",
     "password":""
@@ -86,12 +87,23 @@ export default function SignIn() {
     event.preventDefault();   
   
     axios.post(  
-      'http://localhost:8080/user/sign-in', data
+      CommonConstant.SIGIN_API_ENDPOINT, data
       ).then((response) => {
         console.log(response);
-        setIsLoggedIn(response.data);
-        history.push("/dashboard");
 
+        setIsLoggedIn(response.data.authenticated);
+        if(isLoggedIn){
+          setIsAdmin(response.data.admin)
+            
+          if(isAdmin)
+            {
+              history.push(CommonConstant.ADMIN_DASHBOARD)
+            }else{
+            history.push(CommonConstant.DASHBOARD);
+            }
+
+        }
+        
       }, (error) => {
         console.log(error);
       });
@@ -101,6 +113,7 @@ export default function SignIn() {
   const classes = useStyles();
   const [data, setData] = useState(userRequest);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -163,7 +176,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href={CommonConstant.SIGN_UP} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

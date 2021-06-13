@@ -93,9 +93,11 @@ export default function SignIn() {
 
         setIsLoggedIn(response.data.authenticated);
         if(isLoggedIn){
+          console.log(response.data.admin)
           setIsAdmin(response.data.admin)
-            
-          if(isAdmin)
+            console.log(response.data)
+            console.log(isAdmin)
+          if(response.data.admin)
             {
               history.push(CommonConstant.ADMIN_DASHBOARD)
             }else{
@@ -181,7 +183,10 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
+                <br></br>
+                <div style={{'color':'red'}}>
               {isLoggedIn ? 'Login is successful' : 'Email/Password is incorrect'}
+              </div>
               </Grid>
             </Grid>
             <Box mt={5}>

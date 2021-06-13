@@ -6,6 +6,7 @@ import {AppBar,Button,CardActions,CardContent,
 
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 import { makeStyles } from '@material-ui/core/styles';
+import AdminMenu from './AdminMenu';
 
 // import PhoneIcon from '@material-ui/icons/Phone';
 // import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -20,7 +21,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Admin Panel
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -83,52 +84,8 @@ export default function AdminDashboard() {
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
               Admin Corner
             </Typography>
-           
-                <div>
-                {/* <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          variant="scrollable"
-          scrollButtons="on"
-          indicatorColor="primary"
-          textColor="primary"
-          aria-label="scrollable force tabs example"
-        >
-          <Tab label="Item One" icon={<PhoneIcon />} {...a11yProps(0)} />
-          <Tab label="Item Two" icon={<FavoriteIcon />} {...a11yProps(1)} />
-          <Tab label="Item Three" icon={<PersonPinIcon />} {...a11yProps(2)} />
-          <Tab label="Item Four" icon={<HelpIcon />} {...a11yProps(3)} />
-          <Tab label="Item Five" icon={<ShoppingBasket />} {...a11yProps(4)} />
-          <Tab label="Item Six" icon={<ThumbDown />} {...a11yProps(5)} />
-          <Tab label="Item Seven" icon={<ThumbUp />} {...a11yProps(6)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+           <AdminMenu />
                
-                */}
-                </div>
-          
           
           </Container>
         </div>

@@ -92,7 +92,7 @@ export default function SignUp() {
     event.preventDefault();   
     console.log(data);
     axios.post(  
-      CommonConstant.CREATE_API_ENDPOINT, data
+      CommonConstant.CREATE_USER_API_ENDPOINT, data
       ).then((response) => {
 
         console.log(response.data);

@@ -1,21 +1,22 @@
 import React from 'react';
-import {AppBar,Button,CardActions,CardContent,
-    CardMedia,CssBaseline,Card,Grid,Toolbar,Typography,
-    Container,Link,Tabs,Tab,
+import {AppBar,
+    Link,CssBaseline,Toolbar,Typography,
+    Container
 } from '@material-ui/core';
 
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 import { makeStyles } from '@material-ui/core/styles';
 import AdminMenu from './AdminMenu';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CommonConstant from '../constants/CommonConstant';
 // import PhoneIcon from '@material-ui/icons/Phone';
 // import FavoriteIcon from '@material-ui/icons/Favorite';
 // import PersonPinIcon from '@material-ui/icons/PersonPin';
 // import HelpIcon from '@material-ui/icons/Help';
 // import {ShoppingBasket,ThumbDown,ThumbUp} from '@material-ui/icons';
 
-
-
+const isLogin = sessionStorage.getItem('login');
+console.log("is user loged in: "+ isLogin)
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -69,9 +70,12 @@ export default function AdminDashboard() {
   return (
     <React.Fragment>
       <CssBaseline />
+      <Link href={CommonConstant.SIGN_IN} > 
+         <ExitToAppIcon />
+         </Link>
       <AppBar position="relative">
         <Toolbar>
-          <CameraIcon className={classes.icon} />
+      
           <Typography variant="h6" color="inherit" noWrap>
            Admin Corner
           </Typography>
@@ -89,8 +93,8 @@ export default function AdminDashboard() {
           
           </Container>
         </div>
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
+         {/*<Container className={classes.cardGrid} maxWidth="md">
+       
           <Grid container spacing={4}>
             {cards.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
@@ -121,6 +125,7 @@ export default function AdminDashboard() {
             ))}
           </Grid>
         </Container>
+        */}
       </main>
      
      

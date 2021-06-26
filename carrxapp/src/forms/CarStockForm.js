@@ -51,8 +51,9 @@ const carRequest ={
 
 export default function CarStockForm() {
   const classes = useStyles();
-  const [data, setData] = useState(carRequest)
-  const [image, setImage] = useState(null)
+  const [data, setData] = useState(carRequest);
+  const [image, setImage] = useState(null);
+  const [apiResponse, setAPIResponse] = useState("");
 
   const onImageChange = event => {
     if (event.target.files && event.target.files[0]) {
@@ -83,8 +84,21 @@ export default function CarStockForm() {
     axios.post(  
     CommonConstant.CREATE_CAR_API_ENDPOINT , data
       ).then((response) => {
+        //It means the API is working
         console.log(response);
-        
+        setAPIResponse(response.data);
+        //clear all the textfields after submitting
+        setData({
+          "vin":"",
+        "model":"",
+         "maker":"",
+         "engine":"",
+        "year":"",
+        "imgUrl":"http://aws.s3.fake/img.jpg",
+        "milleage":"",
+        "price":""
+      }
+      )
       }, (error) => {
         console.log(error);
       });
@@ -97,6 +111,7 @@ export default function CarStockForm() {
     <div className={classes.root}>
       <div>
         <TextField
+          value = {data.vin}
           id="standard-full-width"
           label="VIN"
           name="vin"
@@ -110,6 +125,7 @@ export default function CarStockForm() {
           onChange={handleInputChange}
         />
         <TextField
+         value = {data.model}
           id="standard-full-width"
           label="Model"
           name="model"
@@ -123,6 +139,7 @@ export default function CarStockForm() {
           onChange={handleInputChange}
         />
            <TextField
+           value = {data.maker}
           id="standard-full-width"
           label="Maker"
           name="maker"
@@ -136,6 +153,7 @@ export default function CarStockForm() {
           onChange={handleInputChange}
         />
         <TextField
+           value = {data.milleage}
           id="standard-full-width"
           label="MPG"
           name="milleage"
@@ -149,6 +167,7 @@ export default function CarStockForm() {
           onChange={handleInputChange}
         />
            <TextField
+            value = {data.engine}
           id="standard-full-width"
           label="Engine"
           name="engine"
@@ -162,6 +181,7 @@ export default function CarStockForm() {
           onChange={handleInputChange}
         />
           <TextField
+             value = {data.price}
           id="standard-full-width"
           label="Price"
           name="price"
@@ -178,8 +198,7 @@ export default function CarStockForm() {
         <InputLabel htmlFor="age-native-required">Year</InputLabel>
         <Select
           native
-        //   value={state.age}
-        //   onChange={handleChange}
+          value = {data.year}
           name="year"
           inputProps={{
             id: 'age-native-required',
@@ -212,6 +231,9 @@ export default function CarStockForm() {
             >
             Create Car
             </Button>
+            <p>
+              <b style={{color:'green'}}>{apiResponse}</b>
+            </p>
       </div>
 
     

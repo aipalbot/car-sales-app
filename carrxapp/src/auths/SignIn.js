@@ -93,10 +93,15 @@ export default function SignIn() {
 
         setIsLoggedIn(response.data.authenticated);
         if(isLoggedIn){
+          sessionStorage.setItem('login', 'true');
           console.log(response.data.admin)
           setIsAdmin(response.data.admin)
-            console.log(response.data)
-            console.log(isAdmin)
+          console.log(response.data)
+          console.log(isAdmin)
+          //check if the local storage is set
+          const isLogin = sessionStorage.getItem('login');
+          console.log("is user loged in: "+ isLogin);
+
           if(response.data.admin)
             {
               history.push(CommonConstant.ADMIN_DASHBOARD)

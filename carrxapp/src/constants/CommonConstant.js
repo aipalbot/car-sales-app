@@ -12,4 +12,5 @@
         static CREATE_USER_API_ENDPOINT = 'http://localhost:8080/user/create';
         static SIGIN_API_ENDPOINT ='http://localhost:8080/user/sign-in';
         static CREATE_CAR_API_ENDPOINT ='http://localhost:8080/stock/new';
+        static RETRIEVE_CARS_API_ENDPOINT ='http://localhost:8080/stock/items/all';
     }

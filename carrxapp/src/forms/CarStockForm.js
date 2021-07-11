@@ -9,6 +9,25 @@ import {TextField,
 } from '@material-ui/core';
 import axios from "axios";
 import CommonConstant from '../constants/CommonConstant';
+import { uploadFile } from 'react-s3';
+import S3 from 'react-aws-s3';
+const config = {
+  bucketName: CommonConstant.S3_BUCKET,
+  dirName: 'car-images',
+  region: CommonConstant.REGION,
+  accessKeyId: CommonConstant.ACCESS_KEY,
+  secretAccessKey: CommonConstant.SECRET_ACCESS_KEY,
+}
+
+
+const config1 = {
+  bucketName: CommonConstant.S3_BUCKET,
+  dirName: 'media', /* optional */
+  region: 'us-east-1',
+  accessKeyId: CommonConstant.ACCESS_KEY,
+  secretAccessKey: CommonConstant.SECRET_ACCESS_KEY
+}
+const ReactS3Client = new S3(config1);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +63,7 @@ const carRequest ={
    "maker":"",
    "engine":"",
   "year":"",
-  "imgUrl":"http://aws.s3.fake/img.jpg",
+  "imgUrl":"",
   "milleage":"",
   "price":""
 }
@@ -53,16 +72,31 @@ export default function CarStockForm() {
   const classes = useStyles();
   const [data, setData] = useState(carRequest);
   const [image, setImage] = useState(null);
+  const [selectedFile,setSelectedFile] = useState(null)
   const [apiResponse, setAPIResponse] = useState("");
 
   const onImageChange = event => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
+     console.log(img.name)
+      setSelectedFile(img)
       const url = URL.createObjectURL(img);
       setImage(url)
       console.log(url)
     }
   };
+  const handleUpload = async (file) => {
+    // uploadFile(file, config)
+    //     .then(data => console.log(data))
+    //     .catch(err => console.error(err))
+
+    const newFileName = 'test-file.jpg';
+
+ReactS3Client
+    .uploadFile(file, newFileName)
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
+}
 
 
   const handleInputChange = e => {
@@ -81,6 +115,8 @@ export default function CarStockForm() {
   const handleCreateButton = (event) => {
     event.preventDefault();   
     console.log(data)
+    handleUpload(selectedFile)
+    data.imgUrl = selectedFile.name
     axios.post(  
     CommonConstant.CREATE_CAR_API_ENDPOINT , data
       ).then((response) => {
@@ -94,7 +130,7 @@ export default function CarStockForm() {
          "maker":"",
          "engine":"",
         "year":"",
-        "imgUrl":"http://aws.s3.fake/img.jpg",
+        "imgUrl":"",
         "milleage":"",
         "price":""
       }
@@ -217,6 +253,7 @@ export default function CarStockForm() {
             <img src={image} />
             <h1>Select Image</h1>
             <input type="file" name="imgUrl" onChange={onImageChange} />
+            {/* <button onClick={() => handleUpload(selectedFile)}> Upload to S3</button> */}
           </div>
 
           <br/>

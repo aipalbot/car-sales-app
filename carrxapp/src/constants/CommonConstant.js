@@ -7,11 +7,13 @@
         static DASHBOARD = '/dashboard';
         static ADMIN_DASHBOARD = '/admin-dashboard';
         static SIGN_IN ='/sign-in'
-        static SIGN_UP ='/sign-up'
+        static SIGN_UP ='/sign-up'        
+        static CUSTOMER_FORM ='/customer'
         static HOME = '/';
         static CREATE_USER_API_ENDPOINT = 'http://localhost:8080/user/create';
         static SIGIN_API_ENDPOINT ='http://localhost:8080/user/sign-in';
         static CREATE_CAR_API_ENDPOINT ='http://localhost:8080/stock/new';
+        static CREATE_CUST_API_ENDPOINT ='http://localhost:8080/customer/new';
         static RETRIEVE_CARS_API_ENDPOINT ='http://localhost:8080/stock/items/all';
         static S3_BUCKET ='avt-car-images';
         static REGION ='us-east-2';

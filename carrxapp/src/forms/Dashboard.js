@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CommonConstant from '../constants/CommonConstant';
-
+import CustomerForm from './CustomerForm';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -63,6 +63,27 @@ const useStyles = makeStyles((theme) => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function Dashboard() {
+  const [showCustomer,setShowCustomer] =useState(true)
+  const [customerBtnName,setCustomerBtnName] = useState("Update Profile")
+
+  const showCustomerForm = () =>{
+    if(showCustomer){
+      setShowCustomer(false)
+      setCustomerBtnName("Update Profile")
+    }else{
+      setCustomerBtnName("Close Profile")
+      setShowCustomer(true)
+    }
+  }
+
+  const Show = () =>{
+    if (showCustomer) {
+      return <CustomerForm />;
+    }
+  }
+
+
+
   const classes = useStyles();
 
   return (
@@ -74,11 +95,7 @@ export default function Dashboard() {
           <Typography variant="h6" color="inherit" noWrap>
            
         
-          </Typography>
-
-          
-      
-        
+          </Typography>   
 
         </Toolbar>
        
@@ -88,30 +105,29 @@ export default function Dashboard() {
         {/* Hero unit */}
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Album layout
+            <Typography component="h4" variant="h4" align="center" color="textPrimary" gutterBottom>
+              <br></br>
+              Welcome to our Car Sales App
               <br></br>
               <Link href={CommonConstant.SIGN_IN}>
             Sign Out
            </Link>
+         
             </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Something short and leading about the collection below—its contents, the creator, etc.
-              Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-              entirely.
-            </Typography>
+            
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <Button variant="contained" color="primary">
-                    Main call to action
-                  </Button>
+                <Grid item>  
+                  <Button variant="contained" color="primary" onClick={showCustomerForm}>
+                   {customerBtnName}
+                  </Button>                                
+                 {Show()}
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <Button variant="outlined" color="primary">
                     Secondary action
                   </Button>
-                </Grid>
+                </Grid> */}
               </Grid>
             </div>
           </Container>

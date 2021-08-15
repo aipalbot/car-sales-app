@@ -8,6 +8,9 @@ import CommonConstant from '../constants/CommonConstant';
 import { uploadFile } from 'react-s3';
 import S3 from 'react-aws-s3';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const config = {
   bucketName: CommonConstant.S3_BUCKET,
@@ -55,17 +58,24 @@ const useStyles = makeStyles((theme) => ({
 //     });
 //   };
 
-const carRequest ={
+const customerRequest ={
+  "customerEmail":"",
     "address":"",
   "city":"",
-   "state":"",
    "zipCode":"",
    "imageUrl":""
 }
-
+const states =[
+  { code: 'PA', state: 'Pennsylvania' },
+  { code: 'CA', state: 'California' },
+  { code: 'FL', state: 'Florida' }
+]
+const listItems = states.map((stateCode) =>
+<option value={stateCode.code}>{stateCode.state}</option>
+);
 export default function CustomerForm() {
   const classes = useStyles();
-  const [data, setData] = useState(carRequest);
+  const [data, setData] = useState(customerRequest);
   const [image, setImage] = useState(null);
   const [selectedFile,setSelectedFile] = useState(null)
   const [apiResponse, setAPIResponse] = useState("");
@@ -98,6 +108,7 @@ ReactS3Client
     e.preventDefault();
     //code below is an example deconstruct
     const { name, value } = e.target;
+  
     // ...data
     
     setData({
@@ -107,13 +118,17 @@ ReactS3Client
   }
 
 
-  const handleCreateButton = (event) => {
+  const handleUpdateButton = (event) => {
     event.preventDefault();   
     console.log(data)
     handleUpload(selectedFile)
     data.imgUrl = selectedFile.name
-    axios.post(  
-    CommonConstant.CREATE_CAR_API_ENDPOINT , data
+    //retrieve the email of the current user
+    data.customerEmail = sessionStorage.getItem('email')
+    console.log(data)
+
+    axios.put(  
+    CommonConstant.UPDATE_CUST_API_ENDPOINT , data
       ).then((response) => {
         //It means the API is working
         console.log(response);
@@ -121,8 +136,7 @@ ReactS3Client
         //clear all the textfields after submitting
         setData({
             "address":"",
-            "city":"",
-             "state":"",
+            "city":"",         
              "zipCode":"",
              "imageUrl":""
       }
@@ -133,9 +147,9 @@ ReactS3Client
   }
 
   const states =  [
-    { code: 'PA', state: "Pennsylvania" },
-    { code: 'CA', state: "California" },
-    { code: 'FL', state: "Florida" }
+    { code: 'PA', state: 'Pennsylvania' },
+    { code: 'CA', state: 'California' },
+    { code: 'FL', state: 'Florida' }
   ]
   return (
     <div className={classes.root}>
@@ -158,7 +172,7 @@ ReactS3Client
          value = {data.city}
           id="standard-full-width"
           label="City"
-          name="City"
+          name="city"
           style={{ margin: 8 }}
           placeholder="Enter your city"         
           fullWidth
@@ -170,14 +184,21 @@ ReactS3Client
         />
         <br />
         <br/>
-        <Autocomplete
-      id="combo-box-demo"
-      options={states}
-      getOptionLabel={(option) => option.code}
-      style={{ width: 300 }}
-      value = {data.state}
-      renderInput={(params) => <TextField {...params} label="States" variant="outlined" />}
-    />
+        <FormControl className={classes.formControl}>
+        <InputLabel htmlFor="age-native-simple">State</InputLabel>
+        <Select
+          native
+          value={data.state}
+          onChange={handleInputChange}
+          inputProps={{
+            name: 'state',
+            id: 'age-native-simple',
+          }}
+        >
+          <option aria-label="None" value="" />
+        {listItems}
+        </Select>
+      </FormControl>
         <br/>
         <br/>
            <TextField
@@ -212,7 +233,7 @@ ReactS3Client
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleCreateButton}
+              onClick={handleUpdateButton}
             >
             Update Customer Info
             </Button>

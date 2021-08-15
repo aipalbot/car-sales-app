@@ -94,6 +94,8 @@ export default function SignIn() {
         setIsLoggedIn(response.data.authenticated);
         if(isLoggedIn){
           sessionStorage.setItem('login', 'true');
+          //store email of the user within the application
+          sessionStorage.setItem('email', data.email);
           console.log(response.data.admin)
           setIsAdmin(response.data.admin)
           console.log(response.data)

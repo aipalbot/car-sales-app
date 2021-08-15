@@ -94,7 +94,8 @@ export default function SignUp() {
     axios.post(  
       CommonConstant.CREATE_USER_API_ENDPOINT, data
       ).then((response) => {
-
+        //store email of the user within the application
+        sessionStorage.setItem('email', data.email);
         console.log(response.data);
         history.push(CommonConstant.DASHBOARD);
 

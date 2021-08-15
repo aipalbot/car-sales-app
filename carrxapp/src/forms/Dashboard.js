@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -15,6 +15,7 @@ import Link from '@material-ui/core/Link';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CommonConstant from '../constants/CommonConstant';
 import CustomerForm from './CustomerForm';
+import axios from "axios";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -65,6 +66,25 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 export default function Dashboard() {
   const [showCustomer,setShowCustomer] =useState(true)
   const [customerBtnName,setCustomerBtnName] = useState("Update Profile")
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+
+    loadCarsAPI();
+
+    }, [])
+
+  const loadCarsAPI = () => {
+    axios.get(  
+    CommonConstant.RETRIEVE_CARS_API_ENDPOINT
+      ).then((response) => {
+        //It means the API is working
+        console.log(response.data); 
+        setData(response.data)      
+      }, (error) => {
+        console.log(error);
+      });
+  }
 
   const showCustomerForm = () =>{
     if(showCustomer){
@@ -135,20 +155,23 @@ export default function Dashboard() {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {data && data.map((car) => (
+              <Grid item key={car} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={car.carImageUrl}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                     {car.maker} | ${car.price}
                     </Typography>
                     <Typography>
-                      This is a media card. You can use this section to describe the content.
+                   <b>VIN</b> : {car.vin} <br></br>
+                   <b>ENGINE</b>: {car.engine} <br/>
+                   <b>YEAR</b> : {car.year} <br/>
+                   <b>MILEAGE</b> : {car.milleage}
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -156,7 +179,7 @@ export default function Dashboard() {
                       View
                     </Button>
                     <Button size="small" color="primary">
-                      Edit
+                      Add to Cart
                     </Button>
                   </CardActions>
                 </Card>
